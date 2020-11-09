@@ -2,6 +2,16 @@
     Ruta: '/api/usuarios'
 */
 
+/* 
+        MIDDLEWARE UNUSED
+
+    const { check } = require('express-validator');
+    const { validarCampos } = require('../middlewares/validar-campos-unused');
+*/
+
+
+
+
 
 const express = require('express');
 const app = express();
