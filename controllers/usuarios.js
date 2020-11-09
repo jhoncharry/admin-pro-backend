@@ -1,5 +1,5 @@
 const Usuario = require('../models/usuario');
-
+const bcrypt = require('bcryptjs');
 
 
 const getUsuarios = (req, res) => {
@@ -37,6 +37,12 @@ const crearUsuario = (req, res) => {
     let usuario = new Usuario(body);
 
 
+    // Encriptar contraseña
+    const salt = bcrypt.genSaltSync();
+    usuario.password = bcrypt.hashSync(usuario.password, salt);
+
+
+    // Guardar usuario
     usuario.save((error, usuarioDB) => {
 
         if (error) {
