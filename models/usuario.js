@@ -48,12 +48,16 @@ const usuarioSchema = new Schema({
         const { __v, _id, ...object } = this.toObject();
         object.uid = _id
 
-        console.log(object);
         return object;
-
     }); 
 
 */
+
+usuarioSchema.methods.toJSON = function () {
+
+    const { __v, password, ...object } = this.toObject();
+    return object;
+};
 
 usuarioSchema.plugin(uniqueValidator, { message: "{PATH} debe de ser único" });
 usuarioSchema.path("email").validate((email) => validator.isEmail(email), "Email no valido");

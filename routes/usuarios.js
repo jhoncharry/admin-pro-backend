@@ -22,6 +22,7 @@ const usuarioController = require('../controllers/usuarios');
 
 app.get('/api/usuarios', usuarioController.getUsuarios);
 app.post('/api/usuarios', usuarioController.crearUsuario);
+app.put('/api/usuarios/:id', usuarioController.actualizarUsuario);
 
 
 module.exports = app;

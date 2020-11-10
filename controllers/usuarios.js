@@ -1,37 +1,35 @@
+const { response } = require('express');
+
 const Usuario = require('../models/usuario');
 const bcrypt = require('bcryptjs');
 
-
-const getUsuarios = (req, res) => {
-
-
-    Usuario.find({}, "nombre email role google")
-        .exec((error, usuarios) => {
-
-            if (error) {
-                return res.status(400).json({
-                    ok: false,
-                    error
-                });
-            }
+const _ = require("underscore");
 
 
-            res.json({
-                ok: true,
-                usuarios
-            });
+const getUsuarios = async (req, res = response) => {
 
+    try {
+        const findUsers = await Usuario.find({}, "nombre email role google").exec();
 
-
+        res.json({
+            ok: true,
+            findUsers
         });
+
+    } catch (error) {
+
+        return res.status(400).json({
+            ok: false,
+            error
+        });
+    }
 
 
 }
 
 
 
-
-const crearUsuario = (req, res) => {
+const crearUsuario = async (req, res = response) => {
 
     let body = req.body;
     let usuario = new Usuario(body);
@@ -43,24 +41,69 @@ const crearUsuario = (req, res) => {
 
 
     // Guardar usuario
-    usuario.save((error, usuarioDB) => {
+    try {
+        const usuarioDB = await usuario.save();
 
-        if (error) {
-            return res.status(400).json({
+        res.json({
+            ok: true,
+            usuarioDB
+        });
+
+    } catch (error) {
+
+        return res.status(400).json({
+            ok: false,
+            error
+        });
+    }
+
+
+}
+
+
+
+
+const actualizarUsuario = async (req, res = response) => {
+
+    let id = req.params.id;
+    let body = _.pick(req.body, ["nombre", "email", "role"]);
+
+    // Actualizaciones
+    try {
+
+        // Validacion de ID
+        const validateUser = await Usuario.findById(id);
+
+        if (!validateUser) {
+            return res.status(404).json({
                 ok: false,
-                error
+                message: "No existe un usuario con ese Id"
             });
         }
 
 
-        res.json({
+        // Validacion Email
+        if (validateUser.email === body.email) {
+            delete body.email;
+        }
+
+
+        // Actualizamos datos
+        const usuarioDB = await Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true, context: "query" });
+
+        return res.json({
             ok: true,
             usuario: usuarioDB
-        })
+        });
 
 
-    });
+    } catch (error) {
 
+        return res.status(500).json({
+            ok: false,
+            error
+        });
+    }
 
 
 }
@@ -69,5 +112,6 @@ const crearUsuario = (req, res) => {
 
 module.exports = {
     getUsuarios,
-    crearUsuario
+    crearUsuario,
+    actualizarUsuario
 }
