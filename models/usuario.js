@@ -10,27 +10,24 @@ const usuarioSchema = new Schema({
     nombre: {
         type: String,
         required: [true, "El nombre es necesario"]
-
     },
     email: {
         type: String,
         required: [true, "El correo es necesario"],
         unique: true
-
     },
     password: {
         type: String,
         required: [true, "La contraseña es obligatoria"]
-
     },
     img: {
-        type: String
+        type: String,
+        required: false
     },
     role: {
         type: String,
         required: true,
         default: "USER_ROLE"
-
     },
     google: {
         type: Boolean,
