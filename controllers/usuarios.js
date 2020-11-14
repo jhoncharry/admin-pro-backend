@@ -10,12 +10,42 @@ const _ = require("underscore");
 
 const getUsuarios = async (req, res = response) => {
 
+
+    let desde = req.query.desde || 0;
+    desde = Number(desde);
+
+    let limite = req.query.limite || 5;
+    limite = Number(limite);
+
+
     try {
-        const findUsers = await Usuario.find({ estado: true }, "nombre email role google").exec();
+
+        /*   
+
+        Codigo que ejecuta de manera secuencial dos promesas (Poco eficiente), luego de este bloque
+        de comentarios, se encuentra un metodo eficiente que ejecuta las dos promesas al mismo tiempo
+        
+        const findUsers = await Usuario.find({ estado: true }, "nombre email role google")
+                  .skip(desde)
+                  .limit(limite)
+                  .exec();
+      
+              const total = await Usuario.countDocuments(); 
+              
+         */
+
+        const [findUsers, total] = await Promise.all([
+            Usuario.find({ estado: true }, "nombre email role google img")
+                .skip(desde)
+                .limit(limite)
+                .exec(),
+            Usuario.countDocuments()
+        ]);
 
         res.json({
             ok: true,
-            findUsers
+            findUsers,
+            total
         });
 
     } catch (error) {
