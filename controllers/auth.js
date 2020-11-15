@@ -4,6 +4,9 @@ const Usuario = require('../models/usuario');
 const bcrypt = require("bcryptjs");
 const { generarJWT } = require('../helpers/jwt');
 
+const { googleVerify } = require('../helpers/google-verify');
+
+
 
 const login = async (req, res = response) => {
 
@@ -56,6 +59,91 @@ const login = async (req, res = response) => {
 }
 
 
+
+
+const google = async (req, res = response) => {
+
+    const googleToken = req.body.token;
+
+
+    try {
+
+        const googleUser = await googleVerify(googleToken);
+        const usuarioDB = await Usuario.findOne({ email: googleUser.email });
+
+
+        if (usuarioDB) {
+
+            if (usuarioDB.google === false) {
+
+                return res.status(400).json({
+                    ok: false,
+                    error: {
+                        message: "Debe usar su autenticacion normal"
+                    }
+                });
+
+            } else {
+
+                // Generar el TOKEN - JWT
+                const token = await generarJWT(usuarioDB.id);
+
+                return res.json({
+                    ok: true,
+                    usuario: usuarioDB,
+                    token
+                });
+
+            }
+
+        } else {
+
+            //Si el usuario no existe en nuestra base de datos
+
+            let usuario = new Usuario();
+
+            usuario.nombre = googleUser.nombre;
+            usuario.email = googleUser.email;
+            usuario.img = googleUser.img;
+            usuario.google = true;
+            usuario.password = ":)";
+
+            const usuarioDB = await usuario.save();
+
+
+            // Generar el TOKEN - JWT
+            const token = await generarJWT(usuarioDB.id);
+
+            return res.json({
+                ok: true,
+                usuario: usuarioDB,
+                token
+
+            });
+
+        }
+
+
+    } catch (error) {
+
+        res.status(401).json({
+            ok: false,
+            message: "Token no es correcto"
+        });
+
+    }
+
+
+
+
+
+}
+
+
+
+
+
 module.exports = {
-    login
+    login,
+    google
 }

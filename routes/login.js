@@ -8,9 +8,11 @@ const app = express();
 
 
 const usuarioLoginController = require('../controllers/auth');
+const loginValidator = require('../middlewares/validators/login-validator');
 
 
-app.post('/api/login', usuarioLoginController.login);
+app.post('/api/login', loginValidator.loginNormalValidator, usuarioLoginController.login);
+app.post('/api/login/google', loginValidator.loginGoogleValidator, usuarioLoginController.google);
 
 
 
