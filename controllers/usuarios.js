@@ -63,7 +63,7 @@ const getUsuarios = async (req, res = response) => {
 
 const crearUsuario = async (req, res = response) => {
 
-    let body = req.body;
+    let body = _.pick(req.body, ["nombre", "email", "password", "role"]);;
     let usuario = new Usuario(body);
 
 

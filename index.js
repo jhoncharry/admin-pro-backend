@@ -18,6 +18,7 @@ app.use(cors())
 /* 
 
 Ayuda a recibir peticiones del Front-end con el tipado application/x-www-form-urlencoded
+(Caso especial con google sign-in)
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));

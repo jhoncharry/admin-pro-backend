@@ -1,11 +1,8 @@
 const { response } = require('express');
 
-const Hosptial = require('../models/hospital');
-const bcrypt = require('bcryptjs');
-const { generarJWT } = require('../helpers/jwt');
-
+const Hospital = require('../models/hospital');
 const _ = require("underscore");
-const hospital = require('../models/hospital');
+
 
 
 
@@ -13,7 +10,7 @@ const getHospitales = async (req, res = response) => {
 
 
     try {
-        const findHospitales = await Hosptial.find()
+        const findHospitales = await Hospital.find()
             .populate("usuario", "nombre img");
 
         res.json({
@@ -36,11 +33,11 @@ const getHospitales = async (req, res = response) => {
 
 const crearHospital = async (req, res = response) => {
 
-    const id = req.uid
+    const uid = req.uid
 
-    let body = req.body;
-    let hospital = new Hosptial({
-        usuario: id,
+    let body = _.pick(req.body, ["nombre"]);
+    let hospital = new Hospital({
+        usuario: uid,
         ...body
     });
 
@@ -74,40 +71,39 @@ const crearHospital = async (req, res = response) => {
 
 const actualizarHospital = async (req, res = response) => {
 
-    res.json({
-        ok: true,
-        message: "actualizarHospital"
-    });
+    let id = req.params.id;
+    let body = _.pick(req.body, ["nombre"]);
+    let uid = req.uid;
 
-    /* let id = req.params.id;
-    let body = _.pick(req.body, ["nombre", "email", "role"]);
+
 
     // Actualizaciones
     try {
 
         // Validacion de ID
-        const validateUser = await Usuario.findById(id);
+        const validateHospital = await Hospital.findById(id);
 
-        if (!validateUser) {
+        if (!validateHospital) {
             return res.status(404).json({
                 ok: false,
-                message: "No existe un usuario con ese Id"
+                message: "No existe un hospital con ese Id"
             });
         }
 
 
-        // Validacion Email
-        if (validateUser.email === body.email) {
-            delete body.email;
+        // Preparar cambios
+        const cambiosHospital = {
+            ...body,
+            usuario: uid
         }
 
 
         // Actualizamos datos
-        const usuarioDB = await Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true, context: "query" });
+        const hospitalDB = await Hospital.findByIdAndUpdate(id, cambiosHospital, { new: true, runValidators: true, context: "query" });
 
         res.json({
             ok: true,
-            usuario: usuarioDB
+            hospital: hospitalDB
         });
 
 
@@ -118,7 +114,6 @@ const actualizarHospital = async (req, res = response) => {
             error
         });
     }
- */
 
 }
 
@@ -126,52 +121,45 @@ const actualizarHospital = async (req, res = response) => {
 
 const borrarHospital = async (req, res = response) => {
 
-    res.json({
-        ok: true,
-        message: "borrarHospital"
-    });
+    let id = req.params.id;
 
-    /* 
-        let id = req.params.id;
-    
-        let cambiarEstado = {
-            estado: false
-        }
-    
-    
-        // Actualizaciones
-        try {
-    
-            // Validacion de ID
-            const validateUser = await Usuario.findById(id);
-    
-            if (!validateUser) {
-                return res.status(404).json({
-                    ok: false,
-                    message: "No existe un usuario con ese Id"
-                });
-            }
-    
-    
-            // Actualizamos datos
-            const usuarioBorrado = await Usuario.findByIdAndUpdate(id, cambiarEstado, { new: true });
-    
-            return res.json({
-                ok: true,
-                message: "Usuario eliminado",
-                usuarioBorrado
-            });
-    
-    
-        } catch (error) {
-    
-            res.status(500).json({
+    let cambiarEstado = {
+        estado: false
+    }
+
+
+    // Actualizaciones
+    try {
+
+        // Validacion de ID
+        const validateHospital = await Hospital.findById(id);
+
+        if (!validateHospital) {
+            return res.status(404).json({
                 ok: false,
-                error
+                message: "No existe un usuario con ese Id"
             });
-    
         }
-     */
+
+
+        // Actualizamos datos
+        const hospitalBorrado = await Hospital.findByIdAndUpdate(id, cambiarEstado, { new: true });
+
+        return res.json({
+            ok: true,
+            message: "Hospital eliminado",
+            hospitalBorrado
+        });
+
+
+    } catch (error) {
+
+        res.status(500).json({
+            ok: false,
+            error
+        });
+
+    }
 
 }
 

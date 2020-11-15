@@ -16,8 +16,8 @@ const hospitalValidator = require('../middlewares/validators/hospital-validator'
 
 app.get('/api/hospitales', validarJWT, hospitalController.getHospitales);
 app.post('/api/hospitales', [validarJWT, hospitalValidator.hospitalCreateValidator], hospitalController.crearHospital);
-app.put('/api/hospitales/:id', /* [validarJWT, userValidator.userUpdateValidator], */ hospitalController.actualizarHospital);
-app.delete('/api/hospitales/:id', /* validarJWT, */ hospitalController.borrarHospital);
+app.put('/api/hospitales/:id', [validarJWT, hospitalValidator.hospitalUpdateValidator], hospitalController.actualizarHospital);
+app.delete('/api/hospitales/:id', validarJWT, hospitalController.borrarHospital);
 
 
 module.exports = app;

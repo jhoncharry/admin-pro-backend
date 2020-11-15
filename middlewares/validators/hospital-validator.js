@@ -8,17 +8,16 @@ hospitalCreateValidator = [
     validarCampos
 ]
 
-/* userUpdateValidator = [
+hospitalUpdateValidator = [
 
-    check("nombre", "El nombre es obligatorio").not().isEmpty(),
-    check("email", "El email es obligatorio").isEmail(),
-    check("role", "El rol es obligatorio").not().isEmpty(),
+    check("nombre", "El nombre del hospital es necesario ").not().isEmpty(),
     validarCampos
 ]
- */
+
 
 
 module.exports = {
-    hospitalCreateValidator,
 
+    hospitalCreateValidator,
+    hospitalUpdateValidator
 }

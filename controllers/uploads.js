@@ -37,13 +37,13 @@ const fileUpload = (req, res = response) => {
     const file = req.files.imagen;
 
     const nombreCortado = file.name.split(".");
-    const extensioArchivo = nombreCortado[nombreCortado.length - 1];
+    const extensionArchivo = nombreCortado[nombreCortado.length - 1];
 
 
     // Validar extension
     const extensionesValidas = ["png", "jpg", "jpeg", "gif"];
 
-    if (!extensionesValidas.includes(extensioArchivo)) {
+    if (!extensionesValidas.includes(extensionArchivo)) {
         return res.status(400).json({
             ok: false,
             message: "No es una extension permitida"
@@ -52,7 +52,7 @@ const fileUpload = (req, res = response) => {
 
 
     // Generar el nombre del archivo
-    const nombreArchivo = `${uuidv4()}.${extensioArchivo}`;
+    const nombreArchivo = `${uuidv4()}.${extensionArchivo}`;
 
     // Path para guardar la imagen
     const path = `./uploads/${tipo}/${nombreArchivo}`;

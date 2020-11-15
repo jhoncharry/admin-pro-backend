@@ -15,6 +15,10 @@ const HospitalSchema = new Schema({
         type: String,
         required: false
     },
+    estado: {
+        type: Boolean,
+        default: true
+    },
     usuario: {
         type: Schema.Types.ObjectId,
         required: [true, "El usuario es necesario"],
