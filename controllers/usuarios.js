@@ -74,6 +74,17 @@ const crearUsuario = async (req, res = response) => {
 
     // Guardar usuario
     try {
+
+
+        const existeEmail = await Usuario.findOne({ email: body.email });
+
+        if (existeEmail) {
+            return res.status(400).json({
+                ok: false,
+                message: "El correo ya esta registrado"
+            });
+        }
+
         const usuarioDB = await usuario.save();
 
         // Generar el TOKEN - JWT 

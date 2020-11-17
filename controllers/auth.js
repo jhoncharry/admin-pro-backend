@@ -20,9 +20,7 @@ const login = async (req, res = response) => {
         if (!usuarioDB) {
             return res.status(400).json({
                 ok: false,
-                error: {
-                    message: "(Usuario) o contraseña incorrectos"
-                }
+                message: "(Usuario) o contraseña incorrectos"
             })
         }
 
@@ -30,9 +28,7 @@ const login = async (req, res = response) => {
         if (!bcrypt.compareSync(body.password, usuarioDB.password)) {
             return res.status(400).json({
                 ok: false,
-                error: {
-                    message: "Usuario o (contraseña) incorrecto"
-                }
+                message: "Usuario o (contraseña) incorrecto"
             })
         }
 
@@ -43,7 +39,9 @@ const login = async (req, res = response) => {
 
         res.json({
             ok: true,
-            token
+            id: usuarioDB.id,
+            token,
+            usuarioDB
         });
 
 
@@ -78,9 +76,7 @@ const google = async (req, res = response) => {
 
                 return res.status(400).json({
                     ok: false,
-                    error: {
-                        message: "Debe usar su autenticacion normal"
-                    }
+                    message: "Debe usar su autenticacion normal"
                 });
 
             } else {
@@ -90,8 +86,9 @@ const google = async (req, res = response) => {
 
                 return res.json({
                     ok: true,
-                    usuario: usuarioDB,
-                    token
+                    id: usuarioDB.id,
+                    token,
+                    usuarioDB,
                 });
 
             }
@@ -116,9 +113,9 @@ const google = async (req, res = response) => {
 
             return res.json({
                 ok: true,
-                usuario: usuarioDB,
-                token
-
+                id: usuarioDB.id,
+                token,
+                usuarioDB,
             });
 
         }
