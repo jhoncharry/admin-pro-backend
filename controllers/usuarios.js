@@ -130,9 +130,10 @@ const actualizarUsuario = async (req, res = response) => {
 
 
         // Validacion Email
-        if (validateUser.email === body.email) {
+        if (validateUser.email === body.email || validateUser.google) {
             delete body.email;
         }
+
 
 
         // Actualizamos datos
