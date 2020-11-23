@@ -14,7 +14,7 @@ const expressFileUpload = require('express-fileupload');
 
 app.use(expressFileUpload());
 app.put('/api/upload/:tipo/:id', validarJWT, uploadsController.fileUpload);
-app.get('/api/upload/:tipo/:foto', validarJWT, uploadsController.retornaImagen);
+app.get('/api/upload/:tipo/:foto', uploadsController.retornaImagen);
 
 
 module.exports = app;
