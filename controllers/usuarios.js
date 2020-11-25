@@ -35,9 +35,9 @@ const getUsuarios = async (req, res = response) => {
          */
 
         const [findUsers, total] = await Promise.all([
-            Usuario.find({ estado: true }, "nombre email role google img")
+            Usuario.find({}, "nombre email role google img")
                 .skip(desde)
-                .limit(limite)
+                .limit(limite)  
                 .exec(),
             Usuario.countDocuments()
         ]);
@@ -181,8 +181,11 @@ const borrarUsuario = async (req, res = response) => {
         }
 
 
+        //Eliminar Usuario
+        const usuarioBorrado = await Usuario.findByIdAndDelete(id);
+
         // Actualizamos datos
-        const usuarioBorrado = await Usuario.findByIdAndUpdate(id, cambiarEstado, { new: true });
+        // const usuarioBorrado = await Usuario.findByIdAndUpdate(id, cambiarEstado, { new: true });
 
         return res.json({
             ok: true,
