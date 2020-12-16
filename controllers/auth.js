@@ -136,6 +136,7 @@ const google = async (req, res = response) => {
 
 const renewToken = async (req, res = response) => {
 
+
     const uid = req.uid;
 
     // Generar el TOKEN - JWT
