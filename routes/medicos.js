@@ -18,6 +18,7 @@ app.get('/api/medicos', validarJWT, medicoController.getMedicos);
 app.post('/api/medicos', [validarJWT, medicoValidator.medicoCreateValidator], medicoController.crearMedico);
 app.put('/api/medicos/:id', [validarJWT, medicoValidator.medicoUpdateValidator], medicoController.actualizarMedico);
 app.delete('/api/medicos/:id', validarJWT, medicoController.borrarMedico);
+app.get('/api/medicos/:id', validarJWT, medicoController.getMedicoById);
 
 
 module.exports = app;
