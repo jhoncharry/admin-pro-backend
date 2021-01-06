@@ -12,7 +12,7 @@ const busquedaGlobal = async (req, res = response) => {
 
     try {
 
-        const [usuariosDB, medicosDB, hospitalessDB] = await Promise.all([
+        const [usuariosDB, medicosDB, hospitalesDB] = await Promise.all([
 
             Usuario.find({ nombre: regex }),
             Medico.find({ nombre: regex }),
@@ -25,7 +25,7 @@ const busquedaGlobal = async (req, res = response) => {
             ok: true,
             usuariosDB,
             medicosDB,
-            hospitalessDB
+            hospitalesDB
         });
 
     } catch (error) {
