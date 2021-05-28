@@ -12,3 +12,5 @@ uploads/medicos/**.gif
 uploads/usuarios/**.jpg
 uploads/usuarios/**.png
 uploads/usuarios/**.gif
+
+*.env
